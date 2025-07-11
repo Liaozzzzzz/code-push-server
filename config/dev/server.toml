@@ -1,0 +1,7 @@
+[General]
+AppName = "code-push-server"
+Version = "v0.0.1"
+Debug = true
+DisableSwagger = false
+DisablePrintConfig = false
+
