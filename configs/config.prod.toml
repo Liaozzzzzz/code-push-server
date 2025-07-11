@@ -1,0 +1,79 @@
+# 生产环境配置
+# Production Environment Configuration
+
+[General]
+AppName = "code-push-server"
+Version = "v0.0.1"
+Debug = false
+DisableSwagger = true
+DisablePrintConfig = true
+
+[General.HTTP]
+Addr = ":8040"
+ShutdownTimeout = 30  # seconds
+ReadTimeout = 30      # seconds
+WriteTimeout = 30     # seconds
+IdleTimeout = 60      # seconds
+CertFile = "/etc/ssl/certs/server.crt"
+KeyFile = "/etc/ssl/private/server.key"
+
+# 数据库配置
+[Database]
+Driver = "postgres"
+DSN = "postgres://user:password@localhost:5432/codepush?sslmode=require"
+MaxOpenConns = 50
+MaxIdleConns = 25
+ConnMaxLifetime = 1800  # seconds
+
+# 日志配置
+[Log]
+Level = "info"
+Format = "json"
+Output = "file"
+FilePath = "/var/log/code-push-server/app.log"
+MaxSize = 500      # MB
+MaxBackups = 30
+MaxAge = 90        # days
+Compress = true
+
+# 缓存配置
+[Cache]
+Type = "redis"
+TTL = 7200         # seconds
+[Cache.Redis]
+Addr = "localhost:6379"
+Password = ""
+DB = 0
+PoolSize = 10
+
+# 安全配置
+[Security]
+JWTSecret = "${JWT_SECRET}"
+JWTExpiration = 86400  # seconds
+EncryptionKey = "${ENCRYPTION_KEY}"
+
+# 第三方服务配置
+[Services]
+# 邮件服务
+[Services.Email]
+Provider = "smtp"
+Host = "smtp.gmail.com"
+Port = 587
+Username = "${EMAIL_USERNAME}"
+Password = "${EMAIL_PASSWORD}"
+From = "noreply@yourdomain.com"
+
+# 对象存储
+[Services.Storage]
+Provider = "s3"
+Region = "us-west-2"
+Bucket = "prod-code-push-bucket"
+AccessKey = "${AWS_ACCESS_KEY}"
+SecretKey = "${AWS_SECRET_KEY}"
+
+# 监控配置
+[Monitoring]
+EnableMetrics = true
+MetricsAddr = ":9090"
+EnableTracing = true
+TracingEndpoint = "http://jaeger:14268/api/traces" 

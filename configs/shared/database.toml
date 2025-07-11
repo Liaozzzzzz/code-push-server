@@ -1,0 +1,17 @@
+# 共享数据库配置
+# Shared Database Configuration
+
+[Database.Migration]
+AutoMigrate = true
+MigrationPath = "migrations"
+SeedData = false
+
+[Database.Connection]
+MaxRetries = 3
+RetryInterval = 5  # seconds
+PingTimeout = 10   # seconds
+
+[Database.Logging]
+LogLevel = "warn"
+SlowQueryThreshold = 1000  # milliseconds
+LogQueries = false 

@@ -1,0 +1,71 @@
+# 测试环境配置
+# Test Environment Configuration
+
+[General]
+AppName = "code-push-server"
+Version = "v0.0.1"
+Debug = true
+DisableSwagger = false
+DisablePrintConfig = false
+
+[General.HTTP]
+Addr = ":8041"
+ShutdownTimeout = 5   # seconds
+ReadTimeout = 30      # seconds
+WriteTimeout = 30     # seconds
+IdleTimeout = 5       # seconds
+CertFile = ""
+KeyFile = ""
+
+# 数据库配置
+[Database]
+Driver = "sqlite"
+DSN = ":memory:"
+MaxOpenConns = 5
+MaxIdleConns = 2
+ConnMaxLifetime = 60  # seconds
+
+# 日志配置
+[Log]
+Level = "debug"
+Format = "text"
+Output = "stdout"
+FilePath = ""
+MaxSize = 10      # MB
+MaxBackups = 3
+MaxAge = 7        # days
+Compress = false
+
+# 缓存配置
+[Cache]
+Type = "memory"
+TTL = 300         # seconds
+
+# 安全配置
+[Security]
+JWTSecret = "test-jwt-secret-key"
+JWTExpiration = 3600  # seconds
+EncryptionKey = "test-encryption-key-32-characters"
+
+# 第三方服务配置
+[Services]
+# 邮件服务
+[Services.Email]
+Provider = "mock"
+Host = ""
+Port = 0
+Username = ""
+Password = ""
+From = "test@example.com"
+
+# 对象存储
+[Services.Storage]
+Provider = "memory"
+LocalPath = ""
+
+# 监控配置
+[Monitoring]
+EnableMetrics = false
+MetricsAddr = ""
+EnableTracing = false
+TracingEndpoint = "" 

@@ -1,0 +1,82 @@
+# Docker 环境配置示例
+# Docker Environment Configuration Example
+
+[General]
+AppName = "code-push-server"
+Version = "v0.0.1"
+Debug = false
+DisableSwagger = false
+DisablePrintConfig = false
+
+[General.HTTP]
+Addr = ":8040"
+ShutdownTimeout = 30  # seconds
+ReadTimeout = 60      # seconds
+WriteTimeout = 60     # seconds
+IdleTimeout = 10      # seconds
+CertFile = ""
+KeyFile = ""
+
+# 数据库配置 - 使用 Docker 容器
+[Database]
+Driver = "postgres"
+DSN = "postgres://codepush:password@postgres:5432/codepush?sslmode=disable"
+MaxOpenConns = 25
+MaxIdleConns = 10
+ConnMaxLifetime = 300  # seconds
+
+# 日志配置
+[Log]
+Level = "info"
+Format = "json"
+Output = "stdout"      # Docker 环境推荐输出到 stdout
+FilePath = ""
+MaxSize = 100
+MaxBackups = 7
+MaxAge = 30
+Compress = true
+
+# 缓存配置 - 使用 Redis 容器
+[Cache]
+Type = "redis"
+TTL = 3600           # seconds
+
+[Cache.Redis]
+Addr = "redis:6379"
+Password = ""
+DB = 0
+PoolSize = 10
+
+# 安全配置
+[Security]
+JWTSecret = "${JWT_SECRET}"
+JWTExpiration = 86400  # seconds
+EncryptionKey = "${ENCRYPTION_KEY}"
+
+# 第三方服务配置
+[Services]
+# 邮件服务
+[Services.Email]
+Provider = "smtp"
+Host = "${EMAIL_HOST}"
+Port = 587
+Username = "${EMAIL_USERNAME}"
+Password = "${EMAIL_PASSWORD}"
+From = "${EMAIL_FROM}"
+
+# 对象存储 - 使用 MinIO 容器
+[Services.Storage]
+Provider = "s3"
+Region = "us-east-1"
+Bucket = "codepush"
+AccessKey = "${MINIO_ACCESS_KEY}"
+SecretKey = "${MINIO_SECRET_KEY}"
+Endpoint = "http://minio:9000"  # MinIO 端点
+ForcePathStyle = true           # MinIO 需要
+
+# 监控配置
+[Monitoring]
+EnableMetrics = true
+MetricsAddr = ":9090"
+EnableTracing = true
+TracingEndpoint = "http://jaeger:14268/api/traces" 

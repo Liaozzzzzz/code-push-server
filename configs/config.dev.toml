@@ -1,0 +1,77 @@
+# 开发环境配置
+# Development Environment Configuration
+
+[General]
+AppName = "code-push-server"
+Version = "v0.0.1"
+Debug = true
+DisableSwagger = false
+DisablePrintConfig = false
+
+[General.HTTP]
+Addr = ":8040"
+ShutdownTimeout = 10  # seconds
+ReadTimeout = 60      # seconds
+WriteTimeout = 60     # seconds
+IdleTimeout = 10      # seconds
+CertFile = ""
+KeyFile = ""
+
+# 数据库配置
+[Database]
+Driver = "sqlite"
+DSN = "data/dev.db"
+MaxOpenConns = 10
+MaxIdleConns = 5
+ConnMaxLifetime = 300  # seconds
+
+# 日志配置
+[Log]
+Level = "debug"
+Format = "json"
+Output = "stdout"
+FilePath = "logs/dev.log"
+MaxSize = 100      # MB
+MaxBackups = 7
+MaxAge = 30        # days
+Compress = true
+
+# 缓存配置
+[Cache]
+Type = "memory"
+TTL = 3600         # seconds
+
+# 安全配置
+[Security]
+JWTSecret = "dev-jwt-secret-key"
+JWTExpiration = 86400  # seconds
+EncryptionKey = "dev-encryption-key-32-characters"
+
+# 第三方服务配置
+[Services]
+# 邮件服务
+[Services.Email]
+Provider = "smtp"
+Host = "localhost"
+Port = 587
+Username = ""
+Password = ""
+From = "noreply@example.com"
+
+# 对象存储
+[Services.Storage]
+Provider = "local"
+LocalPath = "storage/dev"
+# AWS S3 配置（可选）
+# Region = "us-west-2"
+# Bucket = "dev-bucket"
+# AccessKey = ""
+# SecretKey = ""
+
+# 监控配置
+[Monitoring]
+EnableMetrics = true
+MetricsAddr = ":9090"
+EnableTracing = false
+TracingEndpoint = ""
+

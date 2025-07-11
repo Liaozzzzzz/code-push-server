@@ -16,8 +16,8 @@ func Start() *cli.Command {
 				Name:        "config",
 				Aliases:     []string{"c"},
 				Usage:       "Config directory",
-				DefaultText: "config",
-				Value:       "config",
+				DefaultText: "configs",
+				Value:       "configs",
 			},
 			&cli.StringFlag{
 				Name:        "env",

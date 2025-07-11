@@ -3,7 +3,6 @@ package bootstrap
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/liaozzzzzz/code-push-server/internal/config"
 )
@@ -15,8 +14,13 @@ type RunConfig struct {
 
 func Run(ctx context.Context, runCfg RunConfig) error {
 
-	config.MustLoad(runCfg.ConfigDir, strings.Split(runCfg.Env, ",")...)
+	// 加载配置
+	config.MustLoad(runCfg.ConfigDir, runCfg.Env)
 
-	fmt.Println(config.C)
+	// 这里可以添加更多的启动逻辑
+	if config.C.General.Debug {
+		fmt.Println("🐛 调试模式已启用")
+	}
+
 	return nil
 }

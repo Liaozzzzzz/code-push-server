@@ -1,0 +1,30 @@
+# 共享安全配置
+# Shared Security Configuration
+
+[Security.CORS]
+AllowedOrigins = ["*"]
+AllowedMethods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+AllowedHeaders = ["*"]
+ExposedHeaders = []
+AllowCredentials = true
+MaxAge = 86400  # seconds
+
+[Security.RateLimit]
+Enable = true
+RequestsPerMinute = 100
+BurstSize = 20
+CleanupInterval = 300  # seconds
+
+[Security.Auth]
+TokenType = "Bearer"
+TokenHeader = "Authorization"
+RefreshTokenExpiration = 604800  # seconds (7 days)
+
+[Security.Password]
+MinLength = 8
+RequireUppercase = true
+RequireLowercase = true
+RequireNumbers = true
+RequireSymbols = true
+MaxAttempts = 5
+LockoutDuration = 900  # seconds (15 minutes) 

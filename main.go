@@ -11,8 +11,8 @@ import (
 
 func main() {
 	app := cli.Command{
-		Name:  "code-push",
-		Usage: "code push",
+		Name:  "code-push-server",
+		Usage: "code push server",
 		Commands: []*cli.Command{
 			cmd.Start(),
 		},
