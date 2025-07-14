@@ -23,20 +23,30 @@ run:
 	@echo "直接运行项目..."
 	go run main.go start -c configs -e dev
 
-# 构建项目
+# 构建项目（跨平台兼容）
 build:
 	@echo "构建项目..."
+ifeq ($(OS),Windows_NT)
+	go build -o bin/code-push-server.exe main.go
+else
 	go build -o bin/code-push-server main.go
+endif
 
 # 安装并运行
 install-run:
 	@echo "安装并运行项目..."
 	go install && code-push-server start -c configs -e dev
 
-# 清理临时文件
+# 清理临时文件（跨平台兼容）
 clean:
 	@echo "清理临时文件..."
+ifeq ($(OS),Windows_NT)
 	rm -rf tmp/ bin/ build-errors.log
+else
+	@powershell -Command "if (Test-Path tmp) { Remove-Item -Recurse -Force tmp }"
+	@powershell -Command "if (Test-Path bin) { Remove-Item -Recurse -Force bin }"
+	@powershell -Command "if (Test-Path build-errors.log) { Remove-Item -Force build-errors.log }"
+endif
 
 # 安装开发工具
 install-tools:

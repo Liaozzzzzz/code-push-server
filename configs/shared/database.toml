@@ -2,7 +2,7 @@
 # Shared Database Configuration
 
 [Database.Migration]
-AutoMigrate = true
+AutoMigrate = false
 MigrationPath = "migrations"
 SeedData = false
 

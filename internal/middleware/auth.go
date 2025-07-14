@@ -5,69 +5,56 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/liaozzzzzz/code-push-server/internal/models"
+	"github.com/liaozzzzzz/code-push-server/internal/utils/errors"
+	"github.com/liaozzzzzz/code-push-server/internal/utils/response"
 )
 
-// AuthRequired 认证中间件
+// AuthMiddleware JWT认证中间件
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 获取Authorization头部
+		// 获取Authorization头
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, models.Error(models.CodeInvalidToken, "缺少认证头部"))
+			c.JSON(http.StatusUnauthorized, response.Error(errors.CodeInvalidToken, "缺少认证头部"))
 			c.Abort()
 			return
 		}
 
-		// 检查Bearer token格式
-		if !strings.HasPrefix(authHeader, "Bearer ") {
-			c.JSON(http.StatusUnauthorized, models.Error(models.CodeInvalidToken, "无效的认证格式"))
+		// 检查Bearer格式
+		parts := strings.SplitN(authHeader, " ", 2)
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.JSON(http.StatusUnauthorized, response.Error(errors.CodeInvalidToken, "无效的认证格式"))
 			c.Abort()
 			return
 		}
 
-		// 提取token
-		token := strings.TrimPrefix(authHeader, "Bearer ")
+		// 获取token
+		token := parts[1]
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, models.Error(models.CodeInvalidToken, "缺少认证令牌"))
+			c.JSON(http.StatusUnauthorized, response.Error(errors.CodeInvalidToken, "缺少认证令牌"))
 			c.Abort()
 			return
 		}
 
-		// 验证token（这里简化处理，实际应该验证JWT token）
+		// 验证token（这里简化处理，实际应该验证JWT）
 		// 在实际项目中，这里应该：
 		// 1. 解析JWT token
-		// 2. 验证token是否有效
-		// 3. 从token中提取用户信息
-		// 4. 检查用户是否存在且状态正常
+		// 2. 验证token的有效性
+		// 3. 获取用户信息
+		// 4. 设置用户上下文
 
-		// 临时实现：假设token是用户ID
-		// 实际实现应该使用JWT库来验证token
-		userID := parseTokenToUserID(token)
-		if userID == 0 {
-			c.JSON(http.StatusUnauthorized, models.Error(models.CodeInvalidToken, "无效的认证令牌"))
+		// 简单的token验证示例
+		if !strings.HasPrefix(token, "mock_token_") {
+			c.JSON(http.StatusUnauthorized, response.Error(errors.CodeInvalidToken, "无效的认证令牌"))
 			c.Abort()
 			return
 		}
 
-		// 将用户ID存储到上下文中
-		c.Set("user_id", userID)
+		// 设置用户信息到上下文（示例）
+		username := strings.TrimPrefix(token, "mock_token_")
+		c.Set("username", username)
+		c.Set("user_id", 1) // 示例用户ID
+
 		c.Next()
 	}
-}
-
-// parseTokenToUserID 解析token获取用户ID
-// 这是一个临时实现，实际应该使用JWT库
-func parseTokenToUserID(token string) uint {
-	// 临时实现：假设token就是用户ID的字符串形式
-	// 实际实现应该解析JWT token
-
-	// 这里简化处理，返回固定的用户ID用于测试
-	// 在实际项目中，应该：
-	// 1. 使用JWT库解析token
-	// 2. 验证token签名
-	// 3. 检查token是否过期
-	// 4. 从token claims中提取用户ID
-
-	return 1 // 临时返回用户ID为1
 }

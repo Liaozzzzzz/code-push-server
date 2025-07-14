@@ -1,0 +1,48 @@
+package controller
+
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/liaozzzzzz/code-push-server/internal/dto"
+	"github.com/liaozzzzzz/code-push-server/internal/service"
+	"github.com/liaozzzzzz/code-push-server/internal/utils/errors"
+	"github.com/liaozzzzzz/code-push-server/internal/utils/response"
+)
+
+// LoginController 登录控制器
+type LoginController struct {
+	loginService *service.LoginService
+}
+
+// NewLoginController 创建登录控制器实例
+func NewLoginController() *LoginController {
+	return &LoginController{
+		loginService: service.NewLoginService(),
+	}
+}
+
+// Login 用户登录
+func (c *LoginController) Login(ctx *gin.Context) {
+	data := new(dto.LoginForm)
+	if err := response.ParseJSON(ctx, data); err != nil {
+		response.HandleParamError(ctx, err.Error())
+		return
+	}
+
+	result, err := c.loginService.Login(data)
+	if err != nil {
+		if bizErr, ok := err.(*errors.BusinessError); ok {
+			response.HandleBusinessError(ctx, bizErr.GetCode(), bizErr.Error())
+		} else {
+			response.HandleBusinessError(ctx, errors.CodeServiceError, "服务错误")
+		}
+		return
+	}
+
+	response.HandleSuccess(ctx, result)
+}
+
+// Logout 用户登出
+func (c *LoginController) Logout(ctx *gin.Context) {
+	// 简单的登出处理，实际应该清除token等
+	response.HandleSuccess(ctx, gin.H{"message": "登出成功"})
+}

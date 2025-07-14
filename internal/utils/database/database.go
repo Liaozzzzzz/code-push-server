@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/liaozzzzzz/code-push-server/internal/config"
-	"github.com/liaozzzzzz/code-push-server/internal/models"
-	"gorm.io/driver/sqlite"
+	"github.com/liaozzzzzz/code-push-server/internal/entity"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -21,8 +21,8 @@ func Initialize() error {
 
 	var dialector gorm.Dialector
 	switch cfg.Driver {
-	case "sqlite":
-		dialector = sqlite.Open(cfg.DSN)
+	case "mysql":
+		dialector = mysql.Open(cfg.DSN)
 	default:
 		return fmt.Errorf("不支持的数据库驱动: %s", cfg.Driver)
 	}
@@ -88,8 +88,11 @@ func Initialize() error {
 // autoMigrate 自动迁移数据库表
 func autoMigrate() error {
 	return DB.AutoMigrate(
-		&models.User{},
-		&models.App{},
+		&entity.User{},
+		&entity.Role{},
+		&entity.Menu{},
+		&entity.RoleMenu{},
+		&entity.UserRole{},
 	)
 }
 

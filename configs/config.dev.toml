@@ -19,8 +19,8 @@ KeyFile = ""
 
 # 数据库配置
 [Database]
-Driver = "sqlite"
-DSN = "data/dev.db"
+Driver = "mysql"
+DSN = "root:root@tcp(127.0.0.1:3306)/codepush?charset=utf8mb4&parseTime=true&loc=Local"
 MaxOpenConns = 10
 MaxIdleConns = 5
 ConnMaxLifetime = 300  # seconds

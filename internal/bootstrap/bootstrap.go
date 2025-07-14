@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/liaozzzzzz/code-push-server/internal/config"
-	"github.com/liaozzzzzz/code-push-server/internal/server"
 )
 
 type RunConfig struct {
@@ -24,6 +23,6 @@ func Run(ctx context.Context, runCfg RunConfig) error {
 	}
 
 	// 创建并启动HTTP服务器
-	srv := server.NewServer()
-	return srv.Start()
+	srv := NewServer()
+	return srv.StartServer()
 }

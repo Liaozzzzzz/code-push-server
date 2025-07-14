@@ -1,4 +1,4 @@
-package server
+package bootstrap
 
 import (
 	"context"
@@ -12,8 +12,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/liaozzzzzz/code-push-server/internal/config"
-	"github.com/liaozzzzzz/code-push-server/internal/database"
 	"github.com/liaozzzzzz/code-push-server/internal/router"
+	"github.com/liaozzzzzz/code-push-server/internal/utils/database"
 )
 
 // Server HTTP服务器
@@ -28,7 +28,7 @@ func NewServer() *Server {
 }
 
 // Start 启动服务器
-func (s *Server) Start() error {
+func (s *Server) StartServer() error {
 	// 初始化数据库
 	if err := database.Initialize(); err != nil {
 		return fmt.Errorf("初始化数据库失败: %w", err)
@@ -92,7 +92,7 @@ func (s *Server) waitForShutdown() {
 }
 
 // Stop 停止服务器
-func (s *Server) Stop() error {
+func (s *Server) StopServer() error {
 	if s.httpServer != nil {
 		return s.httpServer.Close()
 	}
