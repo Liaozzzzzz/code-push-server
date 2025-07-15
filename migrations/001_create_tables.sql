@@ -2,6 +2,23 @@
 CREATE DATABASE IF NOT EXISTS codepush;
 USE codepush;
 
+-- 部门表
+drop table if exists dept;
+create table if not exists dept (
+  dept_id           bigint(20)      not null auto_increment    comment '部门id',
+  parent_id         bigint(20)      default 0                  comment '父部门id',
+  dept_name         varchar(30)     default ''                 comment '部门名称',
+  order_num         int(4)          default 0                  comment '显示顺序',
+  leader            varchar(20)     default null               comment '负责人',
+  phone             varchar(11)     default null               comment '联系电话',
+  email             varchar(50)     default null               comment '邮箱',
+  status            char(1)         default '0'                comment '部门状态（0正常 1停用）',
+  created_at 	    datetime                                   comment '创建时间',
+  updated_at        datetime                                   comment '更新时间',
+  deleted_at        datetime                                   comment '删除时间',
+  primary key (dept_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci comment = '部门表';
+
 -- 用户表
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (

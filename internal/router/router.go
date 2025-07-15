@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/liaozzzzzz/code-push-server/internal/controller"
 	"github.com/liaozzzzzz/code-push-server/internal/middleware"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // SetupRouter 设置路由
@@ -23,6 +25,8 @@ func SetupRouter() *gin.Engine {
 			"message": "ok",
 		})
 	})
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	// 创建控制器实例
 	// userController := controller.NewUserController()

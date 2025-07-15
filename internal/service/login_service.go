@@ -3,7 +3,10 @@ package service
 import (
 	"errors"
 	"fmt"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/liaozzzzzz/code-push-server/internal/config"
 	"github.com/liaozzzzzz/code-push-server/internal/dao"
 	"github.com/liaozzzzzz/code-push-server/internal/dto"
 	"github.com/liaozzzzzz/code-push-server/internal/types"
@@ -46,16 +49,26 @@ func (s *LoginService) Login(req *dto.LoginForm) (*dto.LoginResult, error) {
 	}
 
 	// 检查用户状态
-	fmt.Println(user.UserStatus)
 	if user.UserStatus != types.UserEnabled {
 		return nil, utilsErrors.NewBusinessError(utilsErrors.CodePermissionDenied, "用户已被禁用")
 	}
 
-	// 生成token（这里简化处理，实际应该使用JWT等）
-	token := "mock_token_" + user.Username
+	// 生成token
+	claims := jwt.MapClaims{
+		"username": user.Username,
+		"userId":   user.UserID,
+		"ack":      user.AckCode,
+		"exp":      config.C.Security.JWTExpiration,
+		"iat":      time.Now().Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString([]byte(config.C.Security.JWTSecret))
+	if err != nil {
+		return nil, err
+	}
 
 	return &dto.LoginResult{
-		Token: token,
+		Token: tokenString,
 		User:  *user,
 	}, nil
 }

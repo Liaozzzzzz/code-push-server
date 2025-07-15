@@ -26,13 +26,13 @@ type UserUpdateRequest struct {
 
 // UserResponse 用户响应
 type UserResponse struct {
-	UserID    int32            `json:"userId"`
-	Username  string           `json:"username"`
-	Nickname  types.NullString `json:"nickname"`
-	Email     string           `json:"email"`
-	Avatar    types.NullString `json:"avatar"`
-	CreatedAt time.Time        `json:"created_at"`
-	UpdatedAt time.Time        `json:"updated_at"`
+	UserID    int32     `json:"userId"`
+	Username  string    `json:"username"`
+	Nickname  *string   `json:"nickname"`
+	Email     string    `json:"email"`
+	Avatar    *string   `json:"avatar"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // ToUserResponse 将用户实体转换为响应DTO

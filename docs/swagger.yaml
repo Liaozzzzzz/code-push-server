@@ -1,0 +1,138 @@
+basePath: /api/v1
+definitions:
+  dto.LoginForm:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.LoginResult:
+    properties:
+      token:
+        description: 令牌
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/entity.User'
+        description: 用户
+    type: object
+  entity.User:
+    properties:
+      ackCode:
+        type: string
+      avatar:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      nickname:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+      userStatus:
+        $ref: '#/definitions/types.UserStatus'
+      username:
+        type: string
+    type: object
+  errors.BusinessCode:
+    enum:
+    - 10000
+    - 20001
+    - 20002
+    - 20003
+    - 20004
+    - 20007
+    - 20008
+    - 30001
+    - 30002
+    - 30003
+    type: integer
+    x-enum-comments:
+      CodeDatabaseError: 数据库错误
+      CodeInternalError: 内部服务器错误
+      CodeInvalidParams: 参数错误
+      CodeInvalidToken: 无效的令牌
+      CodePermissionDenied: 权限不足
+      CodeResourceExists: 资源已存在
+      CodeResourceNotFound: 资源不存在
+      CodeServiceError: 服务错误
+      CodeTokenExpired: 令牌过期
+    x-enum-varnames:
+    - CodeSuccess
+    - CodeInvalidParams
+    - CodeResourceExists
+    - CodeResourceNotFound
+    - CodePermissionDenied
+    - CodeInvalidToken
+    - CodeTokenExpired
+    - CodeInternalError
+    - CodeDatabaseError
+    - CodeServiceError
+  response.Response:
+    properties:
+      code:
+        allOf:
+        - $ref: '#/definitions/errors.BusinessCode'
+        description: 业务状态码
+      data: {}
+      message:
+        description: 响应消息
+        type: string
+    type: object
+  types.UserStatus:
+    enum:
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    type: string
+    x-enum-varnames:
+    - UserEnabled
+    - UserDisabled
+host: localhost:8042
+info:
+  contact: {}
+  description: code-push-server
+  title: code-push-server
+  version: 0.0.1
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: user login
+      parameters:
+      - description: Login Form
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginResult'
+              type: object
+      summary: user login
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

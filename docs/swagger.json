@@ -1,0 +1,201 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "code-push-server",
+        "title": "code-push-server",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "host": "localhost:8042",
+    "basePath": "/api/v1",
+    "paths": {
+        "/login": {
+            "post": {
+                "description": "user login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "user login",
+                "parameters": [
+                    {
+                        "description": "Login Form",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.LoginResult"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.LoginForm": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LoginResult": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "description": "令牌",
+                    "type": "string"
+                },
+                "user": {
+                    "description": "用户",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.User"
+                        }
+                    ]
+                }
+            }
+        },
+        "entity.User": {
+            "type": "object",
+            "properties": {
+                "ackCode": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                },
+                "userStatus": {
+                    "$ref": "#/definitions/types.UserStatus"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "errors.BusinessCode": {
+            "type": "integer",
+            "enum": [
+                10000,
+                20001,
+                20002,
+                20003,
+                20004,
+                20007,
+                20008,
+                30001,
+                30002,
+                30003
+            ],
+            "x-enum-comments": {
+                "CodeDatabaseError": "数据库错误",
+                "CodeInternalError": "内部服务器错误",
+                "CodeInvalidParams": "参数错误",
+                "CodeInvalidToken": "无效的令牌",
+                "CodePermissionDenied": "权限不足",
+                "CodeResourceExists": "资源已存在",
+                "CodeResourceNotFound": "资源不存在",
+                "CodeServiceError": "服务错误",
+                "CodeTokenExpired": "令牌过期"
+            },
+            "x-enum-varnames": [
+                "CodeSuccess",
+                "CodeInvalidParams",
+                "CodeResourceExists",
+                "CodeResourceNotFound",
+                "CodePermissionDenied",
+                "CodeInvalidToken",
+                "CodeTokenExpired",
+                "CodeInternalError",
+                "CodeDatabaseError",
+                "CodeServiceError"
+            ]
+        },
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "业务状态码",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/errors.BusinessCode"
+                        }
+                    ]
+                },
+                "data": {},
+                "message": {
+                    "description": "响应消息",
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserStatus": {
+            "type": "string",
+            "enum": [
+                "1",
+                "0",
+                "1",
+                "0"
+            ],
+            "x-enum-varnames": [
+                "UserEnabled",
+                "UserDisabled"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

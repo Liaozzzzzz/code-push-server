@@ -19,7 +19,15 @@ func NewLoginController() *LoginController {
 	}
 }
 
-// Login 用户登录
+// Login godoc
+// @Summary      user login
+// @Description  user login
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        data   body      dto.LoginForm  true  "Login Form"
+// @Success      200  {object}  response.Response{data=dto.LoginResult}
+// @Router       /login [post]
 func (c *LoginController) Login(ctx *gin.Context) {
 	data := new(dto.LoginForm)
 	if err := response.ParseJSON(ctx, data); err != nil {
