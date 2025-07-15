@@ -43,9 +43,9 @@ TTL = 3600         # seconds
 
 # 安全配置
 [Security]
-JWTSecret = "dev-jwt-secret-key"
+JWTSecret = "nwlH7jtVWC9paMxjUv0wCdJpz6Md9h6DZQCmriRcbO3QyGNivMtQLDlILspEKNX"
 JWTExpiration = 86400  # seconds
-EncryptionKey = "dev-encryption-key-32-characters"
+EncryptionKey = "OrRbhNze7N3Jk1MQIxLyEJgXWpwPuxWd"
 
 # 第三方服务配置
 [Services]

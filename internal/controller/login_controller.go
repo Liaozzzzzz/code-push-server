@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/liaozzzzzz/code-push-server/internal/dto"
 	"github.com/liaozzzzzz/code-push-server/internal/service"
-	"github.com/liaozzzzzz/code-push-server/internal/utils/errors"
 	"github.com/liaozzzzzz/code-push-server/internal/utils/response"
 )
 
@@ -24,17 +23,13 @@ func NewLoginController() *LoginController {
 func (c *LoginController) Login(ctx *gin.Context) {
 	data := new(dto.LoginForm)
 	if err := response.ParseJSON(ctx, data); err != nil {
-		response.HandleParamError(ctx, err.Error())
+		response.HandleError(ctx, err)
 		return
 	}
 
 	result, err := c.loginService.Login(data)
 	if err != nil {
-		if bizErr, ok := err.(*errors.BusinessError); ok {
-			response.HandleBusinessError(ctx, bizErr.GetCode(), bizErr.Error())
-		} else {
-			response.HandleBusinessError(ctx, errors.CodeServiceError, "服务错误")
-		}
+		response.HandleError(ctx, err)
 		return
 	}
 

@@ -2,6 +2,7 @@ package dao
 
 import (
 	"github.com/liaozzzzzz/code-push-server/internal/entity"
+	"github.com/liaozzzzzz/code-push-server/internal/types"
 	"github.com/liaozzzzzz/code-push-server/internal/utils/database"
 	"gorm.io/gorm"
 )
@@ -97,6 +98,6 @@ func (d *UserDAO) ExistsByEmail(email string) (bool, error) {
 }
 
 // UpdateStatus 更新用户状态
-func (d *UserDAO) UpdateStatus(id uint, status entity.UserStatus) error {
+func (d *UserDAO) UpdateStatus(id uint, status types.UserStatus) error {
 	return d.db.Model(&entity.User{}).Where("id = ?", id).Update("status", status).Error
 }
