@@ -9,9 +9,14 @@
     "host": "localhost:8042",
     "basePath": "/api/v1",
     "paths": {
-        "/login": {
+        "/dept/create": {
             "post": {
-                "description": "user login",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "创建部门",
                 "consumes": [
                     "application/json"
                 ],
@@ -19,13 +24,204 @@
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "dept"
                 ],
-                "summary": "user login",
+                "summary": "创建部门",
+                "parameters": [
+                    {
+                        "description": "Dept Create Form",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeptCreateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.DeptResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/dept/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "删除部门",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dept"
+                ],
+                "summary": "删除部门",
+                "parameters": [
+                    {
+                        "description": "Dept Delete Form",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeptDeleteForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/dept/tree": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取部门树形结构",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dept"
+                ],
+                "summary": "获取部门树",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.DeptTreeResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/dept/update": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更新部门信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dept"
+                ],
+                "summary": "更新部门信息",
+                "parameters": [
+                    {
+                        "description": "Dept Update Form",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeptUpdateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "账户密码登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "账户密码登录",
                 "parameters": [
                     {
                         "description": "Login Form",
-                        "name": "data",
+                        "name": "object",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -57,6 +253,187 @@
         }
     },
     "definitions": {
+        "dto.DeptCreateForm": {
+            "type": "object",
+            "required": [
+                "deptName",
+                "parentId",
+                "sort",
+                "status"
+            ],
+            "properties": {
+                "deptName": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "leader": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.DeptStatus"
+                        }
+                    ]
+                }
+            }
+        },
+        "dto.DeptDeleteForm": {
+            "type": "object",
+            "required": [
+                "deptId"
+            ],
+            "properties": {
+                "deptId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.DeptResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deptId": {
+                    "type": "integer"
+                },
+                "deptName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "leader": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.DeptStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.DeptTreeResponse": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.DeptTreeResponse"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deptId": {
+                    "type": "integer"
+                },
+                "deptName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "leader": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.DeptStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.DeptUpdateForm": {
+            "type": "object",
+            "required": [
+                "deptId",
+                "deptName",
+                "parentId",
+                "sort",
+                "status"
+            ],
+            "properties": {
+                "deptId": {
+                    "type": "integer"
+                },
+                "deptName": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "leader": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.DeptStatus"
+                        }
+                    ]
+                }
+            }
+        },
         "dto.LoginForm": {
             "type": "object",
             "required": [
@@ -131,12 +508,17 @@
                 20004,
                 20007,
                 20008,
+                20009,
+                20010,
+                20011,
                 30001,
                 30002,
                 30003
             ],
             "x-enum-comments": {
+                "CodeCreateFailed": "创建失败",
                 "CodeDatabaseError": "数据库错误",
+                "CodeDisabled": "已禁用",
                 "CodeInternalError": "内部服务器错误",
                 "CodeInvalidParams": "参数错误",
                 "CodeInvalidToken": "无效的令牌",
@@ -144,7 +526,8 @@
                 "CodeResourceExists": "资源已存在",
                 "CodeResourceNotFound": "资源不存在",
                 "CodeServiceError": "服务错误",
-                "CodeTokenExpired": "令牌过期"
+                "CodeTokenExpired": "令牌过期",
+                "CodeUpdateFailed": "更新失败"
             },
             "x-enum-varnames": [
                 "CodeSuccess",
@@ -154,6 +537,9 @@
                 "CodePermissionDenied",
                 "CodeInvalidToken",
                 "CodeTokenExpired",
+                "CodeCreateFailed",
+                "CodeUpdateFailed",
+                "CodeDisabled",
                 "CodeInternalError",
                 "CodeDatabaseError",
                 "CodeServiceError"
@@ -177,9 +563,24 @@
                 }
             }
         },
+        "types.DeptStatus": {
+            "type": "string",
+            "enum": [
+                "1",
+                "0",
+                "1",
+                "0"
+            ],
+            "x-enum-varnames": [
+                "UserEnabled",
+                "UserDisabled"
+            ]
+        },
         "types.UserStatus": {
             "type": "string",
             "enum": [
+                "1",
+                "0",
                 "1",
                 "0",
                 "1",

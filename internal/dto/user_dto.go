@@ -19,14 +19,14 @@ type UserCreateRequest struct {
 
 // UserUpdateRequest 用户更新请求
 type UserUpdateRequest struct {
-	Id       string `json:"id" binding:"required"`
+	Id       int64  `json:"id" binding:"required"`
 	Username string `json:"username" binding:"omitempty,min=3,max=50"`
 	Email    string `json:"email" binding:"omitempty,email"`
 }
 
 // UserResponse 用户响应
 type UserResponse struct {
-	UserID    int32     `json:"userId"`
+	UserID    int64     `json:"userId"`
 	Username  string    `json:"username"`
 	Nickname  *string   `json:"nickname"`
 	Email     string    `json:"email"`

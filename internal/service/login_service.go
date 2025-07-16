@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -44,13 +43,12 @@ func (s *LoginService) Login(req *dto.LoginForm) (*dto.LoginResult, error) {
 
 	// 验证密码
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(decryptedPassword)); err != nil {
-		fmt.Println(err)
 		return nil, utilsErrors.NewBusinessError(utilsErrors.CodeInvalidParams, "密码错误")
 	}
 
 	// 检查用户状态
 	if user.UserStatus != types.UserEnabled {
-		return nil, utilsErrors.NewBusinessError(utilsErrors.CodePermissionDenied, "用户已被禁用")
+		return nil, utilsErrors.NewBusinessError(utilsErrors.CodePermissionDenied, "用户已停用")
 	}
 
 	// 生成token
@@ -58,8 +56,7 @@ func (s *LoginService) Login(req *dto.LoginForm) (*dto.LoginResult, error) {
 		"username": user.Username,
 		"userId":   user.UserID,
 		"ack":      user.AckCode,
-		"exp":      config.C.Security.JWTExpiration,
-		"iat":      time.Now().Unix(),
+		"exp":      time.Now().Add(time.Duration(config.C.Security.JWTExpiration) * time.Second).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(config.C.Security.JWTSecret))
@@ -69,6 +66,6 @@ func (s *LoginService) Login(req *dto.LoginForm) (*dto.LoginResult, error) {
 
 	return &dto.LoginResult{
 		Token: tokenString,
-		User:  *user,
+		User:  user,
 	}, nil
 }

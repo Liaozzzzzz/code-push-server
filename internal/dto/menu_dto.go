@@ -18,7 +18,7 @@ type MenuCreateRequest struct {
 
 // MenuUpdateRequest 更新菜单请求
 type MenuUpdateRequest struct {
-	Id       string           `json:"id" binding:"required"`
+	Id       int64            `json:"id" binding:"required"`
 	MenuName string           `json:"menuName" binding:"omitempty,min=3,max=50"`
 	MenuSort int32            `json:"menuSort" binding:"omitempty,min=0"`
 	Status   types.MenuStatus `json:"status" binding:"required,oneof='1' '0'"`
@@ -27,7 +27,7 @@ type MenuUpdateRequest struct {
 
 // MenuResponse 菜单响应
 type MenuResponse struct {
-	MenuID     int32            `json:"menuId"`
+	MenuID     int64            `json:"menuId"`
 	MenuName   string           `json:"menuName"`
 	MenuSort   int32            `json:"menuSort"`
 	MenuStatus types.MenuStatus `json:"menuStatus"`
@@ -41,8 +41,8 @@ func ToMenuResponse(menu *entity.Menu) *MenuResponse {
 	return &MenuResponse{
 		MenuID:     menu.MenuID,
 		MenuName:   menu.MenuName,
-		MenuSort:   menu.MenuSort,
-		MenuStatus: menu.MenuStatus,
+		MenuSort:   menu.Sort,
+		MenuStatus: menu.Status,
 		Remark:     menu.Remark,
 		CreatedAt:  menu.CreatedAt,
 		UpdatedAt:  menu.UpdatedAt,

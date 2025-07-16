@@ -7,7 +7,7 @@ import (
 )
 
 // Parse body json data to struct
-func ParseJSON(c *gin.Context, obj interface{}) *errors.BusinessError {
+func ParseJSON(c *gin.Context, obj any) *errors.BusinessError {
 	if err := c.ShouldBindJSON(obj); err != nil {
 		return errors.NewBusinessErrorf(errors.CodeInvalidParams, "Failed to parse json: %s", err.Error())
 	}
@@ -15,7 +15,7 @@ func ParseJSON(c *gin.Context, obj interface{}) *errors.BusinessError {
 }
 
 // Parse query parameter to struct
-func ParseQuery(c *gin.Context, obj interface{}) *errors.BusinessError {
+func ParseQuery(c *gin.Context, obj any) *errors.BusinessError {
 	if err := c.ShouldBindQuery(obj); err != nil {
 		return errors.NewBusinessErrorf(errors.CodeInvalidParams, "Failed to parse query: %s", err.Error())
 	}
@@ -23,7 +23,7 @@ func ParseQuery(c *gin.Context, obj interface{}) *errors.BusinessError {
 }
 
 // Parse body form data to struct
-func ParseForm(c *gin.Context, obj interface{}) *errors.BusinessError {
+func ParseForm(c *gin.Context, obj any) *errors.BusinessError {
 	if err := c.ShouldBindWith(obj, binding.Form); err != nil {
 		return errors.NewBusinessErrorf(errors.CodeInvalidParams, "Failed to parse form: %s", err.Error())
 	}

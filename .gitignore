@@ -54,4 +54,16 @@ temp/
 # Build artifacts
 dist/
 build/
-bin/ 
+bin/
+
+# Debug files
+*.debug
+*.pprof
+debug.log
+build-errors.log
+
+# Delve debugger files
+.dlv/
+
+# Air temporary files
+.air.toml.bak 

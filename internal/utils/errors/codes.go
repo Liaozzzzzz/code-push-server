@@ -15,6 +15,9 @@ const (
 	CodePermissionDenied BusinessCode = 20004 // 权限不足
 	CodeInvalidToken     BusinessCode = 20007 // 无效的令牌
 	CodeTokenExpired     BusinessCode = 20008 // 令牌过期
+	CodeCreateFailed     BusinessCode = 20009 // 创建失败
+	CodeUpdateFailed     BusinessCode = 20010 // 更新失败
+	CodeDisabled         BusinessCode = 20011 // 已禁用
 
 	// 服务器错误 30000-39999
 	CodeInternalError BusinessCode = 30001 // 内部服务器错误

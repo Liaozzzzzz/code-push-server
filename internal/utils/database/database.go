@@ -93,6 +93,7 @@ func autoMigrate() error {
 		&entity.Menu{},
 		&entity.RoleMenu{},
 		&entity.UserRole{},
+		&entity.Dept{},
 	)
 }
 

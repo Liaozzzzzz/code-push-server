@@ -1,7 +1,10 @@
 package router
 
 import (
+	"net/http/pprof"
+
 	"github.com/gin-gonic/gin"
+	"github.com/liaozzzzzz/code-push-server/internal/config"
 	"github.com/liaozzzzzz/code-push-server/internal/controller"
 	"github.com/liaozzzzzz/code-push-server/internal/middleware"
 	swaggerfiles "github.com/swaggo/files"
@@ -26,11 +29,31 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 
+	// 在调试模式下添加pprof路由
+	if config.C.General.Debug {
+		debugGroup := r.Group("/debug/pprof")
+		{
+			debugGroup.GET("/", gin.WrapF(pprof.Index))
+			debugGroup.GET("/cmdline", gin.WrapF(pprof.Cmdline))
+			debugGroup.GET("/profile", gin.WrapF(pprof.Profile))
+			debugGroup.POST("/symbol", gin.WrapF(pprof.Symbol))
+			debugGroup.GET("/symbol", gin.WrapF(pprof.Symbol))
+			debugGroup.GET("/trace", gin.WrapF(pprof.Trace))
+			debugGroup.GET("/allocs", gin.WrapF(pprof.Handler("allocs").ServeHTTP))
+			debugGroup.GET("/block", gin.WrapF(pprof.Handler("block").ServeHTTP))
+			debugGroup.GET("/goroutine", gin.WrapF(pprof.Handler("goroutine").ServeHTTP))
+			debugGroup.GET("/heap", gin.WrapF(pprof.Handler("heap").ServeHTTP))
+			debugGroup.GET("/mutex", gin.WrapF(pprof.Handler("mutex").ServeHTTP))
+			debugGroup.GET("/threadcreate", gin.WrapF(pprof.Handler("threadcreate").ServeHTTP))
+		}
+	}
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	// 创建控制器实例
 	// userController := controller.NewUserController()
 	loginController := controller.NewLoginController()
+	deptController := controller.NewDeptController()
 
 	// API路由组
 	api := r.Group("/api/v1")
@@ -44,8 +67,18 @@ func SetupRouter() *gin.Engine {
 		{
 			authenticated.POST("/logout", loginController.Logout)
 
+			// 部门管理
+			dept := authenticated.Group("/dept")
+			{
+
+				dept.GET("/tree", deptController.SelectDeptTree)
+				dept.POST("/create", deptController.Create)
+				dept.PUT("/update", deptController.Update)
+				dept.DELETE("/delete", deptController.Delete)
+			}
+
 			// 用户管理路由
-			// users := api.Group("/users")
+			// users := authenticated.Group("/users")
 			// {
 			// 	users.POST("", userController.Create)       // 创建用户
 			// 	users.GET("", userController.List)          // 获取用户列表

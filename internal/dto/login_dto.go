@@ -10,6 +10,6 @@ type LoginForm struct {
 
 // LoginResult 登录结果
 type LoginResult struct {
-	Token string      `json:"token"` // 令牌
-	User  entity.User `json:"user"`  // 用户
+	Token string       `json:"token"` // 令牌
+	User  *entity.User `json:"user"`  // 用户
 }

@@ -1,5 +1,127 @@
 basePath: /api/v1
 definitions:
+  dto.DeptCreateForm:
+    properties:
+      deptName:
+        maxLength: 50
+        minLength: 3
+        type: string
+      email:
+        maxLength: 50
+        type: string
+      leader:
+        maxLength: 50
+        type: string
+      parentId:
+        type: integer
+      phone:
+        maxLength: 50
+        type: string
+      sort:
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/types.DeptStatus'
+        enum:
+        - "1"
+        - "0"
+    required:
+    - deptName
+    - parentId
+    - sort
+    - status
+    type: object
+  dto.DeptDeleteForm:
+    properties:
+      deptId:
+        type: integer
+    required:
+    - deptId
+    type: object
+  dto.DeptResponse:
+    properties:
+      createdAt:
+        type: string
+      deptId:
+        type: integer
+      deptName:
+        type: string
+      email:
+        type: string
+      leader:
+        type: string
+      parentId:
+        type: integer
+      phone:
+        type: string
+      sort:
+        type: integer
+      status:
+        $ref: '#/definitions/types.DeptStatus'
+      updatedAt:
+        type: string
+    type: object
+  dto.DeptTreeResponse:
+    properties:
+      children:
+        items:
+          $ref: '#/definitions/dto.DeptTreeResponse'
+        type: array
+      createdAt:
+        type: string
+      deptId:
+        type: integer
+      deptName:
+        type: string
+      email:
+        type: string
+      leader:
+        type: string
+      parentId:
+        type: integer
+      phone:
+        type: string
+      sort:
+        type: integer
+      status:
+        $ref: '#/definitions/types.DeptStatus'
+      updatedAt:
+        type: string
+    type: object
+  dto.DeptUpdateForm:
+    properties:
+      deptId:
+        type: integer
+      deptName:
+        maxLength: 50
+        minLength: 3
+        type: string
+      email:
+        maxLength: 50
+        type: string
+      leader:
+        maxLength: 50
+        type: string
+      parentId:
+        type: integer
+      phone:
+        maxLength: 50
+        type: string
+      sort:
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/types.DeptStatus'
+        enum:
+        - "1"
+        - "0"
+    required:
+    - deptId
+    - deptName
+    - parentId
+    - sort
+    - status
+    type: object
   dto.LoginForm:
     properties:
       password:
@@ -50,12 +172,17 @@ definitions:
     - 20004
     - 20007
     - 20008
+    - 20009
+    - 20010
+    - 20011
     - 30001
     - 30002
     - 30003
     type: integer
     x-enum-comments:
+      CodeCreateFailed: 创建失败
       CodeDatabaseError: 数据库错误
+      CodeDisabled: 已禁用
       CodeInternalError: 内部服务器错误
       CodeInvalidParams: 参数错误
       CodeInvalidToken: 无效的令牌
@@ -64,6 +191,7 @@ definitions:
       CodeResourceNotFound: 资源不存在
       CodeServiceError: 服务错误
       CodeTokenExpired: 令牌过期
+      CodeUpdateFailed: 更新失败
     x-enum-varnames:
     - CodeSuccess
     - CodeInvalidParams
@@ -72,6 +200,9 @@ definitions:
     - CodePermissionDenied
     - CodeInvalidToken
     - CodeTokenExpired
+    - CodeCreateFailed
+    - CodeUpdateFailed
+    - CodeDisabled
     - CodeInternalError
     - CodeDatabaseError
     - CodeServiceError
@@ -86,8 +217,20 @@ definitions:
         description: 响应消息
         type: string
     type: object
+  types.DeptStatus:
+    enum:
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    type: string
+    x-enum-varnames:
+    - UserEnabled
+    - UserDisabled
   types.UserStatus:
     enum:
+    - "1"
+    - "0"
     - "1"
     - "0"
     - "1"
@@ -103,15 +246,126 @@ info:
   title: code-push-server
   version: 0.0.1
 paths:
+  /dept/create:
+    post:
+      consumes:
+      - application/json
+      description: 创建部门
+      parameters:
+      - description: Dept Create Form
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DeptCreateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DeptResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建部门
+      tags:
+      - dept
+  /dept/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 删除部门
+      parameters:
+      - description: Dept Delete Form
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DeptDeleteForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除部门
+      tags:
+      - dept
+  /dept/tree:
+    get:
+      consumes:
+      - application/json
+      description: 获取部门树形结构
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.DeptTreeResponse'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取部门树
+      tags:
+      - dept
+  /dept/update:
+    put:
+      consumes:
+      - application/json
+      description: 更新部门信息
+      parameters:
+      - description: Dept Update Form
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DeptUpdateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新部门信息
+      tags:
+      - dept
   /login:
     post:
       consumes:
       - application/json
-      description: user login
+      description: 账户密码登录
       parameters:
       - description: Login Form
         in: body
-        name: data
+        name: object
         required: true
         schema:
           $ref: '#/definitions/dto.LoginForm'
@@ -127,9 +381,9 @@ paths:
                 data:
                   $ref: '#/definitions/dto.LoginResult'
               type: object
-      summary: user login
+      summary: 账户密码登录
       tags:
-      - user
+      - login
 securityDefinitions:
   ApiKeyAuth:
     in: header

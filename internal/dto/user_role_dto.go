@@ -8,14 +8,14 @@ import (
 
 // UserRoleCreateRequest 创建用户角色关联请求
 type UserRoleCreateRequest struct {
-	UserID int32 `json:"userId" binding:"required"`
-	RoleID int32 `json:"roleId" binding:"required"`
+	UserID *int64 `json:"userId" binding:"required"`
+	RoleID *int64 `json:"roleId" binding:"required"`
 }
 
 // UserRoleUpdateRequest 更新用户角色关联请求
 type UserRoleUpdateRequest struct {
-	UserID int32 `json:"userId" binding:"required"`
-	RoleID int32 `json:"roleId" binding:"required"`
+	UserID *int32 `json:"userId" binding:"required"`
+	RoleID *int32 `json:"roleId" binding:"required"`
 }
 
 // UserRoleResponse 用户角色关联响应

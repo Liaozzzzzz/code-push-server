@@ -9,7 +9,7 @@ import (
 
 // User 用户实体模型
 type User struct {
-	UserID     int32            `json:"userId" gorm:"type:bigint(20);primaryKey;autoIncrement;comment:'用户ID'"`
+	UserID     int64            `json:"userId" gorm:"type:bigint(20);primaryKey;autoIncrement;comment:'用户ID'"`
 	Username   string           `json:"username" gorm:"type:varchar(50);not null;uniqueIndex;comment:'用户名'"`
 	Nickname   *string          `json:"nickname" gorm:"type:varchar(50);comment:'昵称'"`
 	Email      string           `json:"email" gorm:"type:varchar(100);not null;uniqueIndex;comment:'邮箱'"`

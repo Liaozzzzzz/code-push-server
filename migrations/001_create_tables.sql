@@ -3,12 +3,12 @@ CREATE DATABASE IF NOT EXISTS codepush;
 USE codepush;
 
 -- 部门表
-drop table if exists dept;
-create table if not exists dept (
+drop table if exists depts;
+create table if not exists depts (
   dept_id           bigint(20)      not null auto_increment    comment '部门id',
   parent_id         bigint(20)      default 0                  comment '父部门id',
   dept_name         varchar(30)     default ''                 comment '部门名称',
-  order_num         int(4)          default 0                  comment '显示顺序',
+  sort              int(4)          default 0                  comment '显示顺序',
   leader            varchar(20)     default null               comment '负责人',
   phone             varchar(11)     default null               comment '联系电话',
   email             varchar(50)     default null               comment '邮箱',

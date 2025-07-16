@@ -71,3 +71,13 @@ const (
 	// MenuIsInternalLink 内链
 	MenuIsInternalLink MenuIsLink = MenuIsLink(StatusDisabled)
 )
+
+// DeptStatus 部门状态类型
+type DeptStatus Status
+
+const (
+	// DeptEnabled 部门启用
+	DeptEnabled DeptStatus = DeptStatus(StatusEnabled)
+	// DeptDisabled 部门禁用
+	DeptDisabled DeptStatus = DeptStatus(StatusDisabled)
+)

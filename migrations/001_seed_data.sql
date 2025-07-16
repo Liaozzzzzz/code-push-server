@@ -1,6 +1,6 @@
 -- 初始数据
 -- 插入默认部门
-INSERT INTO `dept` (`dept_id`, `parent_id`, `dept_name`, `order_num`, `leader`, `phone`, `email`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `depts` (`dept_id`, `parent_id`, `dept_name`, `sort`, `leader`, `phone`, `email`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 0, '总公司', 1, 'admin', '12345678901', 'admin@example.com', '1', '2021-01-01 00:00:00', '2021-01-01 00:00:00', NULL);
 
 -- 插入默认角色
@@ -42,8 +42,8 @@ INSERT INTO `role_menus` (`role_id`, `menu_id`) VALUES
 (2, 1), (2, 2), (2, 3), (2, 7), (2, 8), (2, 12), (2, 13);
 
 -- 插入默认管理员用户（密码：admin123）
-INSERT INTO `users` (`user_id`, `username`, `nickname`, `email`, `password`, `status`) VALUES
-(1, 'admin', '系统管理员', 'admin@example.com', '$10$9CSv6p5tWRIP7h4KowHS/eeC3xLnjT8W9OSp5A/0S.Dh/OVDikNjq', '1');
+INSERT INTO `users` (`user_id`, `username`, `nickname`, `email`, `password`, `status`, `ack_code`) VALUES
+(1, 'admin', '系统管理员', 'admin@example.com', '$2a$10$F5pYyOtY.eGS1/AFLEE/r.QGa/FyTzEsL7Ps5uANOKlZAlFiCIIou', '1', '123456');
 
 -- 为管理员分配超级管理员角色
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1); 
