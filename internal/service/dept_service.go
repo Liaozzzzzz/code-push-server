@@ -19,22 +19,6 @@ func NewDeptService() *DeptService {
 	}
 }
 
-func createDeptTree(deptList []*entity.Dept, parentID int64) []*dto.DeptTreeResponse {
-	deptTree := make([]*dto.DeptTreeResponse, 0)
-	for _, dept := range deptList {
-		if dept.ParentID != parentID {
-			continue
-		}
-		var deptResponse dto.DeptTreeResponse
-		if err := copier.Copy(&deptResponse, dept); err != nil {
-			continue
-		}
-		deptResponse.Children = createDeptTree(deptList, dept.DeptID)
-		deptTree = append(deptTree, &deptResponse)
-	}
-	return deptTree
-}
-
 // 递归获取所有子部门
 func getChildrenDeptList(deptList []*entity.Dept, parentID int64) []int64 {
 	if parentID == 0 {
@@ -58,7 +42,7 @@ func (s *DeptService) SelectDeptTree() ([]*dto.DeptTreeResponse, error) {
 		return nil, err
 	}
 
-	deptTree := createDeptTree(deptList, 0)
+	deptTree := dto.BuildDeptTree(deptList, 0)
 	return deptTree, nil
 }
 

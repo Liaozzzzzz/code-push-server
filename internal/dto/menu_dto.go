@@ -3,48 +3,73 @@ package dto
 import (
 	"time"
 
+	"github.com/jinzhu/copier"
 	"github.com/liaozzzzzz/code-push-server/internal/entity"
 	"github.com/liaozzzzzz/code-push-server/internal/types"
 )
 
-// MenuCreateRequest 创建菜单请求
-type MenuCreateRequest struct {
-	MenuName string           `json:"menuName" binding:"required,min=3,max=50"`
-	MenuKey  string           `json:"menuKey" binding:"required,min=3,max=50"`
-	MenuSort int32            `json:"menuSort" binding:"required,min=0"`
-	Status   types.MenuStatus `json:"status" binding:"required,oneof='1' '0'"`
-	Remark   string           `json:"remark" binding:"omitempty,max=255"`
-}
-
-// MenuUpdateRequest 更新菜单请求
-type MenuUpdateRequest struct {
-	Id       int64            `json:"id" binding:"required"`
-	MenuName string           `json:"menuName" binding:"omitempty,min=3,max=50"`
-	MenuSort int32            `json:"menuSort" binding:"omitempty,min=0"`
-	Status   types.MenuStatus `json:"status" binding:"required,oneof='1' '0'"`
-	Remark   string           `json:"remark" binding:"omitempty,max=255"`
-}
-
 // MenuResponse 菜单响应
 type MenuResponse struct {
-	MenuID     int64            `json:"menuId"`
-	MenuName   string           `json:"menuName"`
-	MenuSort   int32            `json:"menuSort"`
-	MenuStatus types.MenuStatus `json:"menuStatus"`
-	Remark     string           `json:"remark"`
-	CreatedAt  time.Time        `json:"created_at"`
-	UpdatedAt  time.Time        `json:"updated_at"`
+	MenuID      int64             `json:"menuId"`
+	MenuName    string            `json:"menuName"`
+	ParentID    int64             `json:"parentId"`
+	Perms       *string           `json:"perms"`
+	MenuType    types.MenuType    `json:"menuType"`
+	MenuVisible types.MenuVisible `json:"menuVisible"`
+	MenuIsLink  types.MenuIsLink  `json:"menuIsLink"`
+	Icon        *string           `json:"icon"`
+	Path        *string           `json:"path"`
+	Sort        int32             `json:"sort"`
+	Status      types.MenuStatus  `json:"status"`
+	Remark      *string           `json:"remark"`
+	CreatedAt   time.Time         `json:"createdAt"`
+	UpdatedAt   time.Time         `json:"updatedAt"`
 }
 
-// ToMenuResponse 将菜单实体转换为响应DTO
-func ToMenuResponse(menu *entity.Menu) *MenuResponse {
-	return &MenuResponse{
-		MenuID:     menu.MenuID,
-		MenuName:   menu.MenuName,
-		MenuSort:   menu.Sort,
-		MenuStatus: menu.Status,
-		Remark:     menu.Remark,
-		CreatedAt:  menu.CreatedAt,
-		UpdatedAt:  menu.UpdatedAt,
+// MenuTreeResponse 菜单树响应
+type MenuTreeResponse struct {
+	MenuResponse
+	Children []*MenuTreeResponse `json:"children"`
+}
+
+// MenuCreateForm 创建菜单表单
+type MenuCreateForm struct {
+	MenuName    string            `json:"menuName" binding:"required,min=2,max=50"`
+	ParentID    *int64            `json:"parentId" binding:"required,min=0"`
+	Perms       string            `json:"perms" binding:"omitempty,max=255"`
+	MenuType    types.MenuType    `json:"menuType" binding:"required,oneof='1' '2' '3'"`
+	MenuVisible types.MenuVisible `json:"menuVisible" binding:"required,oneof='1' '0'"`
+	MenuIsLink  types.MenuIsLink  `json:"menuIsLink" binding:"required,oneof='1' '0'"`
+	Icon        *string           `json:"icon" binding:"omitempty,max=50"`
+	Path        *string           `json:"path" binding:"omitempty,max=255"`
+	Sort        int32             `json:"sort" binding:"required,min=0"`
+	Status      types.MenuStatus  `json:"status" binding:"required,oneof='1' '0'"`
+	Remark      *string           `json:"remark" binding:"omitempty,max=255"`
+}
+
+// MenuUpdateForm 更新菜单表单
+type MenuUpdateForm struct {
+	MenuCreateForm
+	MenuID int64 `json:"menuId" binding:"required"`
+}
+
+// MenuDeleteForm 删除菜单表单
+type MenuDeleteForm struct {
+	MenuID int64 `json:"menuId" binding:"required"`
+}
+
+func BuildMenuTree(menuList []*entity.Menu, parentID int64) []*MenuTreeResponse {
+	menuTree := make([]*MenuTreeResponse, 0)
+	for _, menu := range menuList {
+		if menu.ParentID != parentID {
+			continue
+		}
+		var menuResponse MenuTreeResponse
+		if err := copier.Copy(&menuResponse, menu); err != nil {
+			continue
+		}
+		menuResponse.Children = BuildMenuTree(menuList, menu.MenuID)
+		menuTree = append(menuTree, &menuResponse)
 	}
+	return menuTree
 }

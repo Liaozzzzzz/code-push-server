@@ -142,6 +142,198 @@ definitions:
         - $ref: '#/definitions/entity.User'
         description: 用户
     type: object
+  dto.MenuCreateForm:
+    properties:
+      icon:
+        maxLength: 50
+        type: string
+      menuIsLink:
+        allOf:
+        - $ref: '#/definitions/types.MenuIsLink'
+        enum:
+        - "1"
+        - "0"
+      menuName:
+        maxLength: 50
+        minLength: 2
+        type: string
+      menuType:
+        allOf:
+        - $ref: '#/definitions/types.MenuType'
+        enum:
+        - "1"
+        - "2"
+        - "3"
+      menuVisible:
+        allOf:
+        - $ref: '#/definitions/types.MenuVisible'
+        enum:
+        - "1"
+        - "0"
+      parentId:
+        minimum: 0
+        type: integer
+      path:
+        maxLength: 255
+        type: string
+      perms:
+        maxLength: 255
+        type: string
+      remark:
+        maxLength: 255
+        type: string
+      sort:
+        minimum: 0
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/types.MenuStatus'
+        enum:
+        - "1"
+        - "0"
+    required:
+    - menuIsLink
+    - menuName
+    - menuType
+    - menuVisible
+    - parentId
+    - sort
+    - status
+    type: object
+  dto.MenuDeleteForm:
+    properties:
+      menuId:
+        type: integer
+    required:
+    - menuId
+    type: object
+  dto.MenuResponse:
+    properties:
+      createdAt:
+        type: string
+      icon:
+        type: string
+      menuId:
+        type: integer
+      menuIsLink:
+        $ref: '#/definitions/types.MenuIsLink'
+      menuName:
+        type: string
+      menuType:
+        $ref: '#/definitions/types.MenuType'
+      menuVisible:
+        $ref: '#/definitions/types.MenuVisible'
+      parentId:
+        type: integer
+      path:
+        type: string
+      perms:
+        type: string
+      remark:
+        type: string
+      sort:
+        type: integer
+      status:
+        $ref: '#/definitions/types.MenuStatus'
+      updatedAt:
+        type: string
+    type: object
+  dto.MenuTreeResponse:
+    properties:
+      children:
+        items:
+          type: object
+        type: array
+      createdAt:
+        type: string
+      icon:
+        type: string
+      menuId:
+        type: integer
+      menuIsLink:
+        $ref: '#/definitions/types.MenuIsLink'
+      menuName:
+        type: string
+      menuType:
+        $ref: '#/definitions/types.MenuType'
+      menuVisible:
+        $ref: '#/definitions/types.MenuVisible'
+      parentId:
+        type: integer
+      path:
+        type: string
+      perms:
+        type: string
+      remark:
+        type: string
+      sort:
+        type: integer
+      status:
+        $ref: '#/definitions/types.MenuStatus'
+      updatedAt:
+        type: string
+    type: object
+  dto.MenuUpdateForm:
+    properties:
+      icon:
+        maxLength: 50
+        type: string
+      menuId:
+        type: integer
+      menuIsLink:
+        allOf:
+        - $ref: '#/definitions/types.MenuIsLink'
+        enum:
+        - "1"
+        - "0"
+      menuName:
+        maxLength: 50
+        minLength: 2
+        type: string
+      menuType:
+        allOf:
+        - $ref: '#/definitions/types.MenuType'
+        enum:
+        - "1"
+        - "2"
+        - "3"
+      menuVisible:
+        allOf:
+        - $ref: '#/definitions/types.MenuVisible'
+        enum:
+        - "1"
+        - "0"
+      parentId:
+        minimum: 0
+        type: integer
+      path:
+        maxLength: 255
+        type: string
+      perms:
+        maxLength: 255
+        type: string
+      remark:
+        maxLength: 255
+        type: string
+      sort:
+        minimum: 0
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/types.MenuStatus'
+        enum:
+        - "1"
+        - "0"
+    required:
+    - menuId
+    - menuIsLink
+    - menuName
+    - menuType
+    - menuVisible
+    - parentId
+    - sort
+    - status
+    type: object
   entity.User:
     properties:
       ackCode:
@@ -225,8 +417,66 @@ definitions:
     - "0"
     type: string
     x-enum-varnames:
-    - UserEnabled
-    - UserDisabled
+    - MenuEnabled
+    - MenuDisabled
+  types.MenuIsLink:
+    enum:
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    type: string
+    x-enum-varnames:
+    - MenuEnabled
+    - MenuDisabled
+  types.MenuStatus:
+    enum:
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    type: string
+    x-enum-varnames:
+    - MenuEnabled
+    - MenuDisabled
+  types.MenuType:
+    enum:
+    - "1"
+    - "2"
+    - "3"
+    type: string
+    x-enum-varnames:
+    - MenuTypeDirectory
+    - MenuTypeMenu
+    - MenuTypeButton
+  types.MenuVisible:
+    enum:
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    - "1"
+    - "0"
+    type: string
+    x-enum-varnames:
+    - MenuEnabled
+    - MenuDisabled
   types.UserStatus:
     enum:
     - "1"
@@ -237,8 +487,8 @@ definitions:
     - "0"
     type: string
     x-enum-varnames:
-    - UserEnabled
-    - UserDisabled
+    - MenuEnabled
+    - MenuDisabled
 host: localhost:8042
 info:
   contact: {}
@@ -384,6 +634,117 @@ paths:
       summary: 账户密码登录
       tags:
       - login
+  /menu/create:
+    post:
+      consumes:
+      - application/json
+      description: 创建菜单
+      parameters:
+      - description: Menu Create Form
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/dto.MenuCreateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.MenuResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建菜单
+      tags:
+      - menu
+  /menu/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 删除菜单
+      parameters:
+      - description: Menu Delete Form
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/dto.MenuDeleteForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除菜单
+      tags:
+      - menu
+  /menu/tree:
+    get:
+      consumes:
+      - application/json
+      description: 获取菜单树
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.MenuTreeResponse'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取菜单树
+      tags:
+      - menu
+  /menu/update:
+    put:
+      consumes:
+      - application/json
+      description: 更新菜单
+      parameters:
+      - description: Menu Update Form
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/dto.MenuUpdateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新菜单
+      tags:
+      - menu
 securityDefinitions:
   ApiKeyAuth:
     in: header

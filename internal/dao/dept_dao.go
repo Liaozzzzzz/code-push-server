@@ -40,7 +40,7 @@ func (d *DeptDAO) GetDeptByID(id int64) (*entity.Dept, error) {
 
 // 新增部门
 func (d *DeptDAO) Create(dept *entity.Dept) (*entity.Dept, error) {
-	result := d.db.Create(&dept)
+	result := d.db.Create(dept)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -51,8 +51,7 @@ func (d *DeptDAO) Create(dept *entity.Dept) (*entity.Dept, error) {
 }
 
 func (d *DeptDAO) Update(dept *entity.Dept) error {
-	// 使用 Updates 方法，只更新非零值字段，避免时间字段的零值问题
-	result := d.db.Model(dept).Updates(dept)
+	result := d.db.Model(dept).Where("dept_id = ?", dept.DeptID).Select("*").Omit("created_at", "updated_at", "deleted_at").Updates(dept)
 	if result.RowsAffected == 0 {
 		return utilsErrors.NewBusinessErrorf(utilsErrors.CodeUpdateFailed, "dept update failed")
 	}

@@ -256,6 +256,202 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/menu/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "创建菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "创建菜单",
+                "parameters": [
+                    {
+                        "description": "Menu Create Form",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.MenuCreateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.MenuResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/menu/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "删除菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "删除菜单",
+                "parameters": [
+                    {
+                        "description": "Menu Delete Form",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.MenuDeleteForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/menu/tree": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取菜单树",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "获取菜单树",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.MenuTreeResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/menu/update": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更新菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "更新菜单",
+                "parameters": [
+                    {
+                        "description": "Menu Update Form",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.MenuUpdateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -472,6 +668,297 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.MenuCreateForm": {
+            "type": "object",
+            "required": [
+                "menuIsLink",
+                "menuName",
+                "menuType",
+                "menuVisible",
+                "parentId",
+                "sort",
+                "status"
+            ],
+            "properties": {
+                "icon": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "menuIsLink": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuIsLink"
+                        }
+                    ]
+                },
+                "menuName": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
+                },
+                "menuType": {
+                    "enum": [
+                        "1",
+                        "2",
+                        "3"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuType"
+                        }
+                    ]
+                },
+                "menuVisible": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuVisible"
+                        }
+                    ]
+                },
+                "parentId": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "path": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "perms": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "remark": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "sort": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "status": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuStatus"
+                        }
+                    ]
+                }
+            }
+        },
+        "dto.MenuDeleteForm": {
+            "type": "object",
+            "required": [
+                "menuId"
+            ],
+            "properties": {
+                "menuId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.MenuResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "menuId": {
+                    "type": "integer"
+                },
+                "menuIsLink": {
+                    "$ref": "#/definitions/types.MenuIsLink"
+                },
+                "menuName": {
+                    "type": "string"
+                },
+                "menuType": {
+                    "$ref": "#/definitions/types.MenuType"
+                },
+                "menuVisible": {
+                    "$ref": "#/definitions/types.MenuVisible"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "perms": {
+                    "type": "string"
+                },
+                "remark": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.MenuStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.MenuTreeResponse": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "menuId": {
+                    "type": "integer"
+                },
+                "menuIsLink": {
+                    "$ref": "#/definitions/types.MenuIsLink"
+                },
+                "menuName": {
+                    "type": "string"
+                },
+                "menuType": {
+                    "$ref": "#/definitions/types.MenuType"
+                },
+                "menuVisible": {
+                    "$ref": "#/definitions/types.MenuVisible"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "perms": {
+                    "type": "string"
+                },
+                "remark": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/types.MenuStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.MenuUpdateForm": {
+            "type": "object",
+            "required": [
+                "menuId",
+                "menuIsLink",
+                "menuName",
+                "menuType",
+                "menuVisible",
+                "parentId",
+                "sort",
+                "status"
+            ],
+            "properties": {
+                "icon": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "menuId": {
+                    "type": "integer"
+                },
+                "menuIsLink": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuIsLink"
+                        }
+                    ]
+                },
+                "menuName": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
+                },
+                "menuType": {
+                    "enum": [
+                        "1",
+                        "2",
+                        "3"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuType"
+                        }
+                    ]
+                },
+                "menuVisible": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuVisible"
+                        }
+                    ]
+                },
+                "parentId": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "path": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "perms": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "remark": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "sort": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "status": {
+                    "enum": [
+                        "1",
+                        "0"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.MenuStatus"
+                        }
+                    ]
+                }
+            }
+        },
         "entity.User": {
             "type": "object",
             "properties": {
@@ -578,8 +1065,78 @@ const docTemplate = `{
                 "0"
             ],
             "x-enum-varnames": [
-                "UserEnabled",
-                "UserDisabled"
+                "MenuEnabled",
+                "MenuDisabled"
+            ]
+        },
+        "types.MenuIsLink": {
+            "type": "string",
+            "enum": [
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0"
+            ],
+            "x-enum-varnames": [
+                "MenuEnabled",
+                "MenuDisabled"
+            ]
+        },
+        "types.MenuStatus": {
+            "type": "string",
+            "enum": [
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0"
+            ],
+            "x-enum-varnames": [
+                "MenuEnabled",
+                "MenuDisabled"
+            ]
+        },
+        "types.MenuType": {
+            "type": "string",
+            "enum": [
+                "1",
+                "2",
+                "3"
+            ],
+            "x-enum-varnames": [
+                "MenuTypeDirectory",
+                "MenuTypeMenu",
+                "MenuTypeButton"
+            ]
+        },
+        "types.MenuVisible": {
+            "type": "string",
+            "enum": [
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0",
+                "1",
+                "0"
+            ],
+            "x-enum-varnames": [
+                "MenuEnabled",
+                "MenuDisabled"
             ]
         },
         "types.UserStatus": {
@@ -593,8 +1150,8 @@ const docTemplate = `{
                 "0"
             ],
             "x-enum-varnames": [
-                "UserEnabled",
-                "UserDisabled"
+                "MenuEnabled",
+                "MenuDisabled"
             ]
         }
     },

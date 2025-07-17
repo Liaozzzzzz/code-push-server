@@ -3,6 +3,8 @@ package dto
 import (
 	"time"
 
+	"github.com/jinzhu/copier"
+	"github.com/liaozzzzzz/code-push-server/internal/entity"
 	"github.com/liaozzzzzz/code-push-server/internal/types"
 )
 
@@ -44,4 +46,20 @@ type DeptResponse struct {
 type DeptTreeResponse struct {
 	DeptResponse
 	Children []*DeptTreeResponse `json:"children"`
+}
+
+func BuildDeptTree(deptList []*entity.Dept, parentID int64) []*DeptTreeResponse {
+	deptTree := make([]*DeptTreeResponse, 0)
+	for _, dept := range deptList {
+		if dept.ParentID != parentID {
+			continue
+		}
+		var deptResponse DeptTreeResponse
+		if err := copier.Copy(&deptResponse, dept); err != nil {
+			continue
+		}
+		deptResponse.Children = BuildDeptTree(deptList, dept.DeptID)
+		deptTree = append(deptTree, &deptResponse)
+	}
+	return deptTree
 }
