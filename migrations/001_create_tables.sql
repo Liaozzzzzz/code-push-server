@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `roles` (
     `role_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
     `role_name` VARCHAR(50) NOT NULL COMMENT '角色名称',
     `role_key` VARCHAR(50) NOT NULL COMMENT '角色键',
-    `role_sort` INT(11) NOT NULL DEFAULT 0 COMMENT '角色排序',
     `status` ENUM('1','0') NOT NULL DEFAULT '1' COMMENT '状态',
     `remark` VARCHAR(255) DEFAULT NULL COMMENT '备注',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

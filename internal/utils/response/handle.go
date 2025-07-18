@@ -14,7 +14,7 @@ func HandleSuccess(c *gin.Context, data interface{}) {
 }
 
 // HandlePageSuccess 处理分页成功响应
-func HandlePageSuccess(c *gin.Context, data interface{}, page, size int, total int64) {
+func HandlePageSuccess(c *gin.Context, data interface{}, page, size int, total int) {
 	c.JSON(http.StatusOK, PageSuccess(data, page, size, total))
 }
 

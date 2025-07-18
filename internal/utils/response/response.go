@@ -13,32 +13,29 @@ type Response struct {
 
 // PageResponse 分页响应结构
 type PageResponse struct {
-	Code    errors.BusinessCode `json:"code"`    // 业务状态码
-	Message string              `json:"message"` // 响应消息
-	Data    interface{}         `json:"data,omitempty"`
-	Page    PageInfo            `json:"page"`
+	Pagination
+	Response
 }
 
-// PageInfo 分页信息
-type PageInfo struct {
-	Current    int   `json:"current"`
-	Size       int   `json:"size"`
-	Total      int64 `json:"total"`
-	TotalPages int   `json:"total_pages"`
+// 分页信息
+type Pagination struct {
+	Current int `json:"current"`
+	Size    int `json:"size"`
+	Total   int `json:"total"`
 }
 
 // PageRequest 分页请求
 type PageRequest struct {
-	Page int `form:"page" binding:"omitempty,min=1"`
-	Size int `form:"size" binding:"omitempty,min=1,max=100"`
+	Current int `json:"current" binding:"omitempty,min=1"`
+	Size    int `json:"size" binding:"omitempty,min=1,max=100"`
 }
 
 // GetPage 获取页码，默认为1
 func (p *PageRequest) GetPage() int {
-	if p.Page <= 0 {
+	if p.Current <= 0 {
 		return 1
 	}
-	return p.Page
+	return p.Current
 }
 
 // GetSize 获取每页大小，默认为10
@@ -80,21 +77,17 @@ func FromBusinessError(err *errors.BusinessError) *Response {
 }
 
 // PageSuccess 分页成功响应
-func PageSuccess(data interface{}, page, size int, total int64) *PageResponse {
-	totalPages := int(total) / size
-	if int(total)%size > 0 {
-		totalPages++
-	}
-
+func PageSuccess(data interface{}, current, size, total int) *PageResponse {
 	return &PageResponse{
-		Code:    errors.CodeSuccess,
-		Message: "操作成功",
-		Data:    data,
-		Page: PageInfo{
-			Current:    page,
-			Size:       size,
-			Total:      total,
-			TotalPages: totalPages,
+		Response: Response{
+			Code:    errors.CodeSuccess,
+			Message: "操作成功",
+			Data:    data,
+		},
+		Pagination: Pagination{
+			Current: current,
+			Size:    size,
+			Total:   total,
 		},
 	}
 }

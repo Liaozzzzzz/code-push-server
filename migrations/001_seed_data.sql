@@ -4,9 +4,9 @@ INSERT INTO `depts` (`dept_id`, `parent_id`, `dept_name`, `sort`, `leader`, `pho
 (1, 0, '总公司', 1, 'admin', '12345678901', 'admin@example.com', '1', '2021-01-01 00:00:00', '2021-01-01 00:00:00', NULL);
 
 -- 插入默认角色
-INSERT INTO `roles` (`role_id`, `role_name`, `role_key`, `role_sort`, `status`, `remark`) VALUES
-(1, '超级管理员', 'admin', 1, '1', '超级管理员'),
-(2, '普通用户', 'user', 2, '1', '普通用户');
+INSERT INTO `roles` (`role_id`, `role_name`, `role_key`, `status`, `remark`) VALUES
+(1, '超级管理员', 'admin','1', '超级管理员'),
+(2, '普通用户', 'user', '1', '普通用户');
 
 -- 插入默认菜单
 INSERT INTO `menus` (`menu_id`, `menu_name`, `parent_id`, `perms`, `menu_type`, `menu_visible`, `menu_is_link`, `icon`, `path`, `sort`, `status`, `remark`) VALUES

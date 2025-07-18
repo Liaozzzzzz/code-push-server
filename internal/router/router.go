@@ -55,6 +55,7 @@ func SetupRouter() *gin.Engine {
 	loginController := controller.NewLoginController()
 	deptController := controller.NewDeptController()
 	menuController := controller.NewMenuController()
+	roleController := controller.NewRoleController()
 
 	// API路由组
 	api := r.Group("/api/v1")
@@ -76,6 +77,15 @@ func SetupRouter() *gin.Engine {
 				dept.POST("/create", deptController.Create)
 				dept.PUT("/update", deptController.Update)
 				dept.DELETE("/delete", deptController.Delete)
+			}
+
+			// 角色管理
+			role := authenticated.Group("/role")
+			{
+				role.GET("/list", roleController.List)
+				role.POST("/create", roleController.Create)
+				role.PUT("/update", roleController.Update)
+				role.DELETE("/delete", roleController.Delete)
 			}
 
 			// 菜单管理
